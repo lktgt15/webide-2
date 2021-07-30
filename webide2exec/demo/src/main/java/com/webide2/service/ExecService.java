@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class IDEService {
+public class ExecService {
     private final CodeService codeService;
 
     @Autowired
-    public IDEService(CodeService codeService){
+    public ExecService(CodeService codeService){
         this.codeService = codeService;
     }
 
@@ -108,6 +108,7 @@ public class IDEService {
             e.printStackTrace();
         } finally {
             try {
+                System.out.println(process.pid());
                 process.destroy();
                 if (successreader != null) successreader.close();
                 if (errorreader != null) errorreader.close();
@@ -128,7 +129,7 @@ public class IDEService {
 
         System.out.println("중간 filename:" + fileName);
         if (fileName.equals("RandomMain")) {
-            filepath = "webide2/build/resources/main/static/code/RandomInputGen.txt";
+            filepath = "demo/build/resources/main/static/code/RandomInputGen.txt";
             System.out.println(filepath);
             array = cmdStringList(new String[] {fileName + ".exe","<",filepath}, true);
         } else {
@@ -142,6 +143,7 @@ public class IDEService {
 
             if (!process.waitFor(4, TimeUnit.SECONDS)) {
                 System.out.println("time out");
+                System.out.println(process.pid());
                 codeResult.setInput("Error");
                 process.destroy();
                 System.out.println("return");
